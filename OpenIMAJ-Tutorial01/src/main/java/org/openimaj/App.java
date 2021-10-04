@@ -23,8 +23,8 @@ public class App {
             System.out.println(image.colourSpace);
 
             // Display image
-            DisplayUtilities.display(image);
-            DisplayUtilities.display(image.getBand(0), "Red Channel");
+            DisplayUtilities.displayName(image, "Chapter 2");
+            DisplayUtilities.displayName(image.getBand(0), "Chapter 2");
 
             // Set all green and blue pixels to black
             MBFImage clone = image.clone();
@@ -34,27 +34,33 @@ public class App {
                     clone.getBand(2).pixels[y][x] = 0;
                 }
             }
-            DisplayUtilities.display(clone);
+            DisplayUtilities.displayName(clone, "Chapter 2");
 
             // Code above simplified
             clone.getBand(1).fill(0f);
             clone.getBand(2).fill(0f);
-            DisplayUtilities.display(clone);
+            DisplayUtilities.displayName(clone, "Chapter 2");
 
             // Processor interfaces: ImageProcessors, KernelProcessors, PixelProcessors and GridProcessors
 
             // Edge detection
             image.processInplace(new CannyEdgeDetector());
-            DisplayUtilities.display(image);
+            DisplayUtilities.displayName(image, "Chapter 2");
 
             // Drawing on the image
             image.drawShapeFilled(new Ellipse(700f, 450f, 20f, 10f, 0f), RGBColour.WHITE);
             image.drawShapeFilled(new Ellipse(650f, 425f, 25f, 12f, 0f), RGBColour.WHITE);
             image.drawShapeFilled(new Ellipse(600f, 380f, 30f, 15f, 0f), RGBColour.WHITE);
             image.drawShapeFilled(new Ellipse(500f, 300f, 100f, 70f, 0f), RGBColour.WHITE);
+
+            image.drawShape(new Ellipse(700f, 450f, 20f, 10f, 0f), 2, RGBColour.RED);
+            image.drawShape(new Ellipse(650f, 425f, 25f, 12f, 0f), 2, RGBColour.RED);
+            image.drawShape(new Ellipse(600f, 380f, 30f, 15f, 0f), 2, RGBColour.RED);
+            image.drawShape(new Ellipse(500f, 300f, 100f, 70f, 0f), 2, RGBColour.RED);
+
             image.drawText("OpenIMAJ is", 425, 300, HersheyFont.ASTROLOGY, 20, RGBColour.BLACK);
             image.drawText("Awesome", 425, 330, HersheyFont.ASTROLOGY, 20, RGBColour.BLACK);
-            DisplayUtilities.display(image);
+            DisplayUtilities.displayName(image, "Chapter 2");
         } catch (IOException e) {
             e.printStackTrace();
         }
