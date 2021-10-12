@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Maven.iml" filepath="$PROJECT_DIR$/.idea/Maven.iml" />
       <module fileurl="file://$PROJECT_DIR$/OpenIMAJ-Tutorial01/OpenIMAJ-Tutorial01.iml" filepath="$PROJECT_DIR$/OpenIMAJ-Tutorial01/OpenIMAJ-Tutorial01.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OpenIMAJ-Tutorial02/OpenIMAJ-Tutorial02.iml" filepath="$PROJECT_DIR$/OpenIMAJ-Tutorial02/OpenIMAJ-Tutorial02.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OpenIMAJ-Tutorial07/OpenIMAJ-Tutorial07.iml" filepath="$PROJECT_DIR$/OpenIMAJ-Tutorial07/OpenIMAJ-Tutorial07.iml" />
     </modules>
   </component>
 </project>
