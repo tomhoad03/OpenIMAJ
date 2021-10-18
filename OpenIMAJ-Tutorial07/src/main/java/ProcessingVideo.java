@@ -10,7 +10,7 @@ import org.openimaj.video.xuggle.XuggleVideo;
 import java.net.URL;
 
 public class ProcessingVideo {
-    public static void main( String[] args ) {
+    public static void main(String[] args) {
         try {
             // gets a video using Xuggle library
             Video<MBFImage> video = new XuggleVideo(new URL("http://static.openimaj.org/media/tutorial/keyboardcat.flv"));
