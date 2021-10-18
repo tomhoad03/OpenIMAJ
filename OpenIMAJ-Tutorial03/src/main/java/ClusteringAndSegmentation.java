@@ -4,6 +4,7 @@ import org.openimaj.image.MBFImage;
 import org.openimaj.image.colour.ColourSpace;
 import org.openimaj.image.connectedcomponent.GreyscaleConnectedComponentLabeler;
 import org.openimaj.image.pixel.ConnectedComponent;
+import org.openimaj.image.processor.PixelProcessor;
 import org.openimaj.image.typography.hershey.HersheyFont;
 import org.openimaj.ml.clustering.FloatCentroidsResult;
 import org.openimaj.ml.clustering.assignment.HardAssigner;
@@ -37,17 +38,21 @@ public class ClusteringAndSegmentation {
             }
 
             // assigns pixels to classes by classification
-            HardAssigner<float[],?,?> assigner = result.defaultHardAssigner();
-            for (int y=0; y<input.getHeight(); y++) {
-                for (int x=0; x<input.getWidth(); x++) {
-                    float[] pixel = input.getPixelNative(x, y);
-                    int centroid = assigner.assign(pixel);
-                    input.setPixelNative(x, y, centroids[centroid]);
-                }
-            }
+            input.processInplace((PixelProcessor<Float[]>) pixel -> {
+                HardAssigner<float[],?,?> assigner = result.defaultHardAssigner();
 
-            // input = ColourSpace.convert(input, ColourSpace.RGB);
-            // DisplayUtilities.display(input);
+                float[] floats1 = new float[3];
+                for (int i = 0; i < 3; i++){
+                    floats1[i] = pixel[i];
+                }
+                float[] centroided = centroids[assigner.assign(floats1)];
+
+                Float[] floats2 = new Float[3];
+                for (int i = 0; i < 3; i++){
+                    floats2[i] = centroided[i];
+                }
+                return floats2;
+           });
 
             // a set of pixels of the same class become a connected component
             GreyscaleConnectedComponentLabeler labeler = new GreyscaleConnectedComponentLabeler();
