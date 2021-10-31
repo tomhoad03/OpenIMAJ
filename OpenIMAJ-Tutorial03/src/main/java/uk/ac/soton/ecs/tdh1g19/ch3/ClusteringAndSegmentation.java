@@ -1,3 +1,5 @@
+package uk.ac.soton.ecs.tdh1g19.ch3;
+
 import org.openimaj.image.DisplayUtilities;
 import org.openimaj.image.ImageUtilities;
 import org.openimaj.image.MBFImage;
@@ -5,6 +7,7 @@ import org.openimaj.image.colour.ColourSpace;
 import org.openimaj.image.connectedcomponent.GreyscaleConnectedComponentLabeler;
 import org.openimaj.image.pixel.ConnectedComponent;
 import org.openimaj.image.processor.PixelProcessor;
+import org.openimaj.image.segmentation.SegmentationUtilities;
 import org.openimaj.image.typography.hershey.HersheyFont;
 import org.openimaj.ml.clustering.FloatCentroidsResult;
 import org.openimaj.ml.clustering.assignment.HardAssigner;
@@ -18,15 +21,13 @@ public class ClusteringAndSegmentation {
     public static void main(String[] args) {
         try {
             MBFImage input = ImageUtilities.readMBF(new URL("https://cdn.mos.cms.futurecdn.net/WDWXYGSNBAWinHh2YvDtob-1024-80.jpg"));
+            input = ColourSpace.convert(input, ColourSpace.CIE_Lab);
 
             /*
             clustering - groups similar items together
             using k-means clustering
             converts the colour from RGB to another using the Euclidean distance to retain image
              */
-
-            input = ColourSpace.convert(input, ColourSpace.CIE_Lab);
-
             FloatKMeans cluster = FloatKMeans.createExact(2);
             float[][] imageData = input.getPixelVectorNative(new float[input.getWidth() * input.getHeight()][3]);
             FloatCentroidsResult result = cluster.cluster(imageData);
@@ -65,8 +66,27 @@ public class ClusteringAndSegmentation {
                     continue;
                 input.drawText("Point:" + (i++), comp.calculateCentroidPixel(), HersheyFont.TIMES_MEDIUM, 20);
             }
+
             input = ColourSpace.convert(input, ColourSpace.RGB);
             DisplayUtilities.display(input);
+
+            // FelzenszwalbHuttenlocherSegmenter
+            MBFImage input2 = ImageUtilities.readMBF(new URL("https://cdn.mos.cms.futurecdn.net/WDWXYGSNBAWinHh2YvDtob-1024-80.jpg"));
+            //input2 = ColourSpace.convert(input2, ColourSpace.CIE_Lab);
+
+            GreyscaleConnectedComponentLabeler labeler2 = new GreyscaleConnectedComponentLabeler();
+            List<ConnectedComponent> components2 = labeler.findComponents(input2.flatten());
+            SegmentationUtilities.renderSegments(input2, components2);
+
+            int j = 0;
+            for (ConnectedComponent comp : components2) {
+                if (comp.calculateArea() < 50)
+                    continue;
+                input.drawText("Point:" + (j++), comp.calculateCentroidPixel(), HersheyFont.TIMES_MEDIUM, 20);
+            }
+
+            //input2 = ColourSpace.convert(input2, ColourSpace.RGB);
+            DisplayUtilities.display(input2);
         } catch (Exception e) {
             e.printStackTrace();
 

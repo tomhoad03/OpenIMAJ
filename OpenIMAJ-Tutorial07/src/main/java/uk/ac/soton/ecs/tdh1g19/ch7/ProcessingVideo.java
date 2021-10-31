@@ -1,3 +1,5 @@
+package uk.ac.soton.ecs.tdh1g19.ch7;
+
 import org.openimaj.image.DisplayUtilities;
 import org.openimaj.image.MBFImage;
 import org.openimaj.image.processing.edges.CannyEdgeDetector;
@@ -15,6 +17,15 @@ public class ProcessingVideo {
             // gets a video using Xuggle library
             Video<MBFImage> video = new XuggleVideo(new URL("http://static.openimaj.org/media/tutorial/keyboardcat.flv"));
             VideoDisplay<MBFImage> display1 = VideoDisplay.createVideoDisplay(video);
+            display1.addVideoListener(
+                    new VideoDisplayListener<>() {
+                        public void beforeUpdate(MBFImage frame) {
+                            // frame.processInplace(new FGaussianConvolve(5)); // A low pass filter using a gaussian curve and convolution (coursework 2)
+                            // frame.processInplace(new Laplacian3x3()); // Edge detection using a Laplacian3x3 template
+                            // frame.processInplace(new AdaptiveLocalThresholdGaussian((float) 100, (float) 0.1)); // Adaptive thresholding using Gaussian stuff
+                        }
+                        public void afterUpdate(VideoDisplay<MBFImage> display) {}
+                    });
 
             // can get video from the webcam
             video = new VideoCapture(320, 240);
@@ -31,9 +42,7 @@ public class ProcessingVideo {
                         public void beforeUpdate(MBFImage frame) {
                             frame.processInplace(new CannyEdgeDetector());
                         }
-
-                        public void afterUpdate(VideoDisplay<MBFImage> display) {
-                        }
+                        public void afterUpdate(VideoDisplay<MBFImage> display) {}
                     });
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,3 +1,5 @@
+package uk.ac.soton.ecs.tdh1g19.ch1;
+
 import org.openimaj.image.DisplayUtilities;
 import org.openimaj.image.MBFImage;
 import org.openimaj.image.colour.ColourSpace;
@@ -7,19 +9,19 @@ import org.openimaj.image.typography.hershey.HersheyFont;
 
 public class GettingStarted {
     public static void main( String[] args ) {
-        //Create an image
+        // Create an image
         MBFImage image = new MBFImage(320,70, ColourSpace.RGB);
 
-        //Fill the image with white
+        // Fill the image with white
         image.fill(RGBColour.WHITE);
 
-        //Render some test into the image
+        // Render some test into the image
         image.drawText("Hello World", 10, 60, HersheyFont.CURSIVE, 50, RGBColour.BLACK);
 
-        //Apply a Gaussian blur
+        // Apply a Gaussian blur
         image.processInplace(new FGaussianConvolve(2f));
 
-        //Display the image
+        // Display the image
         DisplayUtilities.display(image);
     }
 }
