@@ -7,6 +7,7 @@ import org.openimaj.image.colour.ColourSpace;
 import org.openimaj.image.connectedcomponent.GreyscaleConnectedComponentLabeler;
 import org.openimaj.image.pixel.ConnectedComponent;
 import org.openimaj.image.processor.PixelProcessor;
+import org.openimaj.image.segmentation.FelzenszwalbHuttenlocherSegmenter;
 import org.openimaj.image.segmentation.SegmentationUtilities;
 import org.openimaj.image.typography.hershey.HersheyFont;
 import org.openimaj.ml.clustering.FloatCentroidsResult;
@@ -20,25 +21,26 @@ import java.util.List;
 public class ClusteringAndSegmentation {
     public static void main(String[] args) {
         try {
+            // Take an image and put it into LAB colour space
             MBFImage input = ImageUtilities.readMBF(new URL("https://cdn.mos.cms.futurecdn.net/WDWXYGSNBAWinHh2YvDtob-1024-80.jpg"));
             input = ColourSpace.convert(input, ColourSpace.CIE_Lab);
 
-            /*
-            clustering - groups similar items together
-            using k-means clustering
-            converts the colour from RGB to another using the Euclidean distance to retain image
-             */
+            // K-Means clustering algorithm using two classes
             FloatKMeans cluster = FloatKMeans.createExact(2);
-            float[][] imageData = input.getPixelVectorNative(new float[input.getWidth() * input.getHeight()][3]);
-            FloatCentroidsResult result = cluster.cluster(imageData);
-            float[][] centroids = result.centroids;
 
-            // prints the coordinates of the classes
+            // Flattens the image
+            float[][] imageData = input.getPixelVectorNative(new float[input.getWidth() * input.getHeight()][3]);
+
+            // Groups the pixels into their classes
+            FloatCentroidsResult result = cluster.cluster(imageData);
+
+            // Prints the coordinates of the centre of the classes/the location of the centroid
+            float[][] centroids = result.centroids;
             for (float[] fs : centroids) {
                 System.out.println(Arrays.toString(fs));
             }
 
-            // assigns pixels to classes by classification
+            // Assigns pixels to classes by classification - exercise 1
             input.processInplace((PixelProcessor<Float[]>) pixel -> {
                 HardAssigner<float[],?,?> assigner = result.defaultHardAssigner();
 
@@ -53,13 +55,21 @@ public class ClusteringAndSegmentation {
                     floats2[i] = centroided[i];
                 }
                 return floats2;
-           });
+            });
 
-            // a set of pixels of the same class become a connected component
+            /*
+            Pixel Processor:
+            Pros: Easy to read, understand, code for as it feels like a for each loop
+            Cons: Felt a bit slower than using the loops
+             */
+
+            MBFImage clonedInput = input.clone();
+
+            // A set of pixels of the same class become a connected component
             GreyscaleConnectedComponentLabeler labeler = new GreyscaleConnectedComponentLabeler();
             List<ConnectedComponent> components = labeler.findComponents(input.flatten());
 
-            // displays the different class areas
+            // Finds a cluster of touching >50 pixels to form a connected component by segmentation
             int i = 0;
             for (ConnectedComponent comp : components) {
                 if (comp.calculateArea() < 50)
@@ -70,23 +80,27 @@ public class ClusteringAndSegmentation {
             input = ColourSpace.convert(input, ColourSpace.RGB);
             DisplayUtilities.display(input);
 
-            // FelzenszwalbHuttenlocherSegmenter
-            MBFImage input2 = ImageUtilities.readMBF(new URL("https://cdn.mos.cms.futurecdn.net/WDWXYGSNBAWinHh2YvDtob-1024-80.jpg"));
-            //input2 = ColourSpace.convert(input2, ColourSpace.CIE_Lab);
-
-            GreyscaleConnectedComponentLabeler labeler2 = new GreyscaleConnectedComponentLabeler();
-            List<ConnectedComponent> components2 = labeler.findComponents(input2.flatten());
-            SegmentationUtilities.renderSegments(input2, components2);
+            // FelzenszwalbHuttenlocherSegmenter - exercise 2
+            FelzenszwalbHuttenlocherSegmenter<MBFImage> segmenter = new FelzenszwalbHuttenlocherSegmenter<>(2, 50, 50);
+            List<ConnectedComponent> semgents = segmenter.segment(clonedInput);
+            MBFImage segmentedInput = SegmentationUtilities.renderSegments(clonedInput.clone(), semgents);
 
             int j = 0;
-            for (ConnectedComponent comp : components2) {
-                if (comp.calculateArea() < 50)
+            for (ConnectedComponent seg : semgents) {
+                if (seg.calculateArea() < 50)
                     continue;
-                input.drawText("Point:" + (j++), comp.calculateCentroidPixel(), HersheyFont.TIMES_MEDIUM, 20);
+                clonedInput.drawText("Point:" + (j++), seg.calculateCentroidPixel(), HersheyFont.TIMES_MEDIUM, 20);
             }
 
-            //input2 = ColourSpace.convert(input2, ColourSpace.RGB);
-            DisplayUtilities.display(input2);
+            clonedInput = ColourSpace.convert(clonedInput, ColourSpace.RGB);
+            DisplayUtilities.display(clonedInput);
+            DisplayUtilities.display(segmentedInput);
+
+            /*
+            FelzenszwalbHuttenlocherSegmenter:
+            Pros: Allowed for better parameters and could detect smaller segments better
+            Cons: Seemed to run much slower than the GreyscaleConnectedComponentLabeler
+             */
         } catch (Exception e) {
             e.printStackTrace();
 
