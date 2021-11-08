@@ -35,6 +35,7 @@
           <option value="http://tiles.apache.org/" />
           <option value="http://static.openimaj.org" />
           <option value="http://datasets.openimaj.org" />
+          <option value="http://openimaj.org" />
         </list>
       </option>
     </inspection_tool>
