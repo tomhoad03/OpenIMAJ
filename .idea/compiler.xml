@@ -9,6 +9,7 @@
         <module name="OpenIMAJ-Tutorial07" />
         <module name="OpenIMAJ-Tutorial03" />
         <module name="OpenIMAJ-Tutorial02" />
+        <module name="OpenIMAJ-Tutorial13" />
         <module name="OpenIMAJ-Tutorial01" />
       </profile>
     </annotationProcessing>
@@ -17,6 +18,7 @@
       <module name="OpenIMAJ-Tutorial02" target="13" />
       <module name="OpenIMAJ-Tutorial03" target="15" />
       <module name="OpenIMAJ-Tutorial07" target="13" />
+      <module name="OpenIMAJ-Tutorial13" target="15" />
     </bytecodeTargetLevel>
   </component>
 </project>

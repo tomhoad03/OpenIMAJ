@@ -24,6 +24,7 @@ public class ClusteringAndSegmentation {
             // Take an image and put it into LAB colour space
             MBFImage input = ImageUtilities.readMBF(new URL("https://cdn.mos.cms.futurecdn.net/WDWXYGSNBAWinHh2YvDtob-1024-80.jpg"));
             input = ColourSpace.convert(input, ColourSpace.CIE_Lab);
+            MBFImage clonedInput = input.clone();
 
             // K-Means clustering algorithm using two classes
             FloatKMeans cluster = FloatKMeans.createExact(2);
@@ -63,8 +64,6 @@ public class ClusteringAndSegmentation {
             Cons: Felt a bit slower than using the loops
              */
 
-            MBFImage clonedInput = input.clone();
-
             // A set of pixels of the same class become a connected component
             GreyscaleConnectedComponentLabeler labeler = new GreyscaleConnectedComponentLabeler();
             List<ConnectedComponent> components = labeler.findComponents(input.flatten());
@@ -78,28 +77,18 @@ public class ClusteringAndSegmentation {
             }
 
             input = ColourSpace.convert(input, ColourSpace.RGB);
-            DisplayUtilities.display(input);
+            // DisplayUtilities.display(input);
 
             // FelzenszwalbHuttenlocherSegmenter - exercise 2
-            FelzenszwalbHuttenlocherSegmenter<MBFImage> segmenter = new FelzenszwalbHuttenlocherSegmenter<>(2, 50, 50);
-            List<ConnectedComponent> semgents = segmenter.segment(clonedInput);
-            MBFImage segmentedInput = SegmentationUtilities.renderSegments(clonedInput.clone(), semgents);
+            FelzenszwalbHuttenlocherSegmenter<MBFImage> segmenter = new FelzenszwalbHuttenlocherSegmenter<>(0, 250, 50);
+            SegmentationUtilities.renderSegments(clonedInput, segmenter.segment(clonedInput));
 
-            int j = 0;
-            for (ConnectedComponent seg : semgents) {
-                if (seg.calculateArea() < 50)
-                    continue;
-                clonedInput.drawText("Point:" + (j++), seg.calculateCentroidPixel(), HersheyFont.TIMES_MEDIUM, 20);
-            }
-
-            clonedInput = ColourSpace.convert(clonedInput, ColourSpace.RGB);
             DisplayUtilities.display(clonedInput);
-            DisplayUtilities.display(segmentedInput);
 
             /*
             FelzenszwalbHuttenlocherSegmenter:
-            Pros: Allowed for better parameters and could detect smaller segments better
-            Cons: Seemed to run much slower than the GreyscaleConnectedComponentLabeler
+            Pros: Reduced the noise created before and hence provided a better segmentation
+            Cons: Seemed to run much slower than the adaptive thresholding, hard to balance weighting
              */
         } catch (Exception e) {
             e.printStackTrace();
