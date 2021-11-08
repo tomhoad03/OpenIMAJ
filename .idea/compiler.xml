@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="OpenIMAJ-Tutorial07" />
+        <module name="OpenIMAJ-Tutorial05" />
         <module name="OpenIMAJ-Tutorial04" />
         <module name="OpenIMAJ-Tutorial03" />
         <module name="OpenIMAJ-Tutorial02" />
@@ -19,6 +20,7 @@
       <module name="OpenIMAJ-Tutorial02" target="13" />
       <module name="OpenIMAJ-Tutorial03" target="15" />
       <module name="OpenIMAJ-Tutorial04" target="15" />
+      <module name="OpenIMAJ-Tutorial05" target="15" />
       <module name="OpenIMAJ-Tutorial07" target="13" />
       <module name="OpenIMAJ-Tutorial13" target="15" />
     </bytecodeTargetLevel>
