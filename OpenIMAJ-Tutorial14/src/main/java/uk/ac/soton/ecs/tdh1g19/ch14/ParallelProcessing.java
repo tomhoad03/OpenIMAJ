@@ -63,13 +63,13 @@ public class ParallelProcessing {
             DisplayUtilities.display("Images", output);
             System.out.println("Time: " + t1.duration() + "ms");
 
-            // 15409ms - no parallelization
-            // 4545ms - parallelization of the inner loop
-            // 4400ms - improved parallelization of the inner loop
+            // 15,409ms - no parallelization
+            // 4,545ms - parallelization of the inner loop
+            // 4,400ms - improved parallelization of the inner loop
 
-            // 8536ms - parallelization of outer loop (with original inner loop)
-            // 4046ms - parallelization of outer loop (with first parallelized inner loop)
-            // 4010ms - parallelization of outer loop (with second parallelized inner loop)
+            // 8,536ms - parallelization of outer loop (with original inner loop)
+            // 4,046ms - parallelization of outer loop (with first parallelized inner loop)
+            // 4,010ms - parallelization of outer loop (with second parallelized inner loop)
 
             // not a noticeable performance difference (sometimes slower, sometimes faster) with both parallelized, with a fair amount of variance
             // overall, using parallelization made a massive performance difference when used on the inner loop, and a decent amount on the inner loop

@@ -13,6 +13,7 @@ import org.openimaj.experiment.evaluation.classification.ClassificationEvaluator
 import org.openimaj.experiment.evaluation.classification.ClassificationResult;
 import org.openimaj.experiment.evaluation.classification.analysers.confusionmatrix.CMAnalyser;
 import org.openimaj.experiment.evaluation.classification.analysers.confusionmatrix.CMResult;
+import org.openimaj.feature.DiskCachingFeatureExtractor;
 import org.openimaj.feature.DoubleFV;
 import org.openimaj.feature.FeatureExtractor;
 import org.openimaj.feature.SparseIntFV;
@@ -31,8 +32,11 @@ import org.openimaj.ml.annotation.linear.LiblinearAnnotator;
 import org.openimaj.ml.clustering.ByteCentroidsResult;
 import org.openimaj.ml.clustering.assignment.HardAssigner;
 import org.openimaj.ml.clustering.kmeans.ByteKMeans;
+import org.openimaj.ml.kernel.HomogeneousKernelMap;
+import org.openimaj.time.Timer;
 import org.openimaj.util.pair.IntFloatPair;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +44,8 @@ import java.util.Map;
 public class CaltechClassification {
     public static void main(String[] args) {
         try {
+            Timer t1 = Timer.timer();
+
             // Get the Caltech dataset
             GroupedDataset<String, VFSListDataset<Record<FImage>>, Record<FImage>> allData = Caltech101.getData(ImageUtilities.FIMAGE_READER);
 
@@ -53,12 +59,16 @@ public class CaltechClassification {
             DenseSIFT dsift = new DenseSIFT(5, 7);
             PyramidDenseSIFT<FImage> pdsift = new PyramidDenseSIFT<>(dsift, 6f, 7);
 
-            // Clusterer and feature extractor
+            // Clusterer and feature extractors - exercises 1 and 2
             HardAssigner<byte[], float[], IntFloatPair> assigner = trainQuantiser(GroupedUniformRandomisedSampler.sample(splits.getTrainingDataset(), 30), pdsift);
-            FeatureExtractor<DoubleFV, Record<FImage>> extractor = new PHOWExtractor(pdsift, assigner);
+            HomogeneousKernelMap mapper = new HomogeneousKernelMap(HomogeneousKernelMap.KernelType.Chi2, HomogeneousKernelMap.WindowType.Rectangular);
 
-            // Construct and train a classifier
-            LiblinearAnnotator<Record<FImage>, String> ann = new LiblinearAnnotator<>(extractor, LiblinearAnnotator.Mode.MULTICLASS, SolverType.L2R_L2LOSS_SVC, 1.0, 0.00001);
+            FeatureExtractor<DoubleFV, Record<FImage>> extractorA = new PHOWExtractor(pdsift, assigner);
+            FeatureExtractor<DoubleFV, Record<FImage>> extractorB = mapper.createWrappedExtractor(new PHOWExtractor(pdsift, assigner));
+            FeatureExtractor<DoubleFV, Record<FImage>> extractorC = new DiskCachingFeatureExtractor<>(new File("\\cache"), new PHOWExtractor(pdsift, assigner));
+
+            // Construct and train a classifiers
+            LiblinearAnnotator<Record<FImage>, String> ann = new LiblinearAnnotator<>(extractorC, LiblinearAnnotator.Mode.MULTICLASS, SolverType.L2R_L2LOSS_SVC, 1.0, 0.00001);
             ann.train(splits.getTrainingDataset());
 
             // Evaluate the classification accuracy
@@ -67,6 +77,24 @@ public class CaltechClassification {
             CMResult<String> result = eval.analyse(guesses);
 
             System.out.println(result);
+            System.out.println("Time: " + t1.duration() + "ms");
+
+            /*
+            Default Classification
+            Accuracy: 0.653
+            Error Rate: 0.347
+            Time: 169,230ms
+
+            Homogenous Kernel Map - slightly slower but noticeably improves the overall accuracy
+            Accuracy: 0.787
+            Error Rate: 0.213
+            Time: 175,611ms
+
+            Feature caching - much slower with a slight improvement in accuracy
+            Accuracy: 0.707
+            Error Rate: 0.293
+            Time: 256716ms
+             */
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -77,14 +105,11 @@ public class CaltechClassification {
         List<LocalFeatureList<ByteDSIFTKeypoint>> allkeys = new ArrayList<>();
 
         for (Record<FImage> rec : sample) {
-            FImage img = rec.getImage();
-
-            pdsift.analyseImage(img);
+            pdsift.analyseImage(rec.getImage());
             allkeys.add(pdsift.getByteKeypoints(0.005f));
         }
 
-        if (allkeys.size() > 10000)
-            allkeys = allkeys.subList(0, 10000);
+        if (allkeys.size() > 10000) allkeys = allkeys.subList(0, 10000);
 
         ByteKMeans km = ByteKMeans.createKDTreeEnsemble(300);
         DataSource<byte[]> datasource = new LocalFeatureListDataSource<>(allkeys);
