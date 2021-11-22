@@ -35,18 +35,18 @@ public class ParallelProcessing {
             Timer t1 = Timer.timer();
 
             // Parallel processing - exercise 1
-            for (ListDataset<MBFImage> clzImages : images.values()) {
+            Parallel.forEach(images.values(), i -> {
                 final MBFImage current = new MBFImage(200, 200, ColourSpace.RGB);
 
-                Parallel.forEachPartitioned(new RangePartitioner<>(clzImages), it -> {
+                Parallel.forEachPartitioned(new RangePartitioner<>(i), it -> {
                     MBFImage tmpAccum = new MBFImage(200, 200, 3);
                     MBFImage tmp = new MBFImage(200, 200, ColourSpace.RGB);
 
                     while (it.hasNext()) {
-                        final MBFImage i = it.next();
+                        final MBFImage j = it.next();
                         tmp.fill(RGBColour.WHITE);
 
-                        final MBFImage small = i.process(resize).normalise();
+                        final MBFImage small = j.process(resize).normalise();
                         final int x = (200 - small.getWidth()) / 2;
                         final int y = (200 - small.getHeight()) / 2;
                         tmp.drawImage(small, x, y);
@@ -56,9 +56,9 @@ public class ParallelProcessing {
                         current.addInplace(tmpAccum);
                     }
                 });
-                current.divideInplace((float) clzImages.size());
+                current.divideInplace((float) i.size());
                 output.add(current);
-            }
+            });
 
             DisplayUtilities.display("Images", output);
             System.out.println("Time: " + t1.duration() + "ms");
@@ -66,6 +66,15 @@ public class ParallelProcessing {
             // 15409ms - no parallelization
             // 4545ms - parallelization of the inner loop
             // 4400ms - improved parallelization of the inner loop
+
+            // 8536ms - parallelization of outer loop (with original inner loop)
+            // 4046ms - parallelization of outer loop (with first parallelized inner loop)
+            // 4010ms - parallelization of outer loop (with second parallelized inner loop)
+
+            // not a noticeable performance difference (sometimes slower, sometimes faster) with both parallelized, with a fair amount of variance
+            // overall, using parallelization made a massive performance difference when used on the inner loop, and a decent amount on the inner loop
+            // very dependent on the hardware of the actual machine, puts a greater demand on the resources of the machine
+            // when used on both the outer and inner loop, this increased the demand without a valuable enough improve in speed compared to just making the inner loop run in parallel
         } catch (Exception e) {
             e.printStackTrace();
         }
