@@ -18,8 +18,7 @@ public class FaceRecognition {
     public static void main(String[] args) {
         try {
             // Collect a dataset of faces
-            // VFSGroupDataset<FImage> dataset1 = new VFSGroupDataset<>("zip:http://datasets.openimaj.org/att_faces.zip", ImageUtilities.FIMAGE_READER);
-            VFSGroupDataset<FImage> dataset = new VFSGroupDataset<>("D:\\Documents\\Coursework1\\OpenIMAJ-Tutorial07\\src\\main\\java\\uk\\ac\\soton\\ecs\\tdh1g19\\ch7\\images", ImageUtilities.FIMAGE_READER);
+            VFSGroupDataset<FImage> dataset = new VFSGroupDataset<>("zip:http://datasets.openimaj.org/att_faces.zip", ImageUtilities.FIMAGE_READER);
 
             // Splitting the dataset into a training set and a testing set
             int nTraining = 5;
