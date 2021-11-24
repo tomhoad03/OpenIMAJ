@@ -3,18 +3,11 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/OpenIMAJ-Tutorial07/pom.xml" />
-        <option value="$PROJECT_DIR$/OpenIMAJ-Tutorial02/pom.xml" />
-        <option value="$PROJECT_DIR$/OpenIMAJ-Tutorial01/pom.xml" />
-        <option value="$PROJECT_DIR$/OpenIMAJ-Tutorial03/pom.xml" />
-        <option value="$PROJECT_DIR$/OpenIMAJ-Tutorial13/pom.xml" />
-        <option value="$PROJECT_DIR$/OpenIMAJ-Tutorial04/pom.xml" />
-        <option value="$PROJECT_DIR$/OpenIMAJ-Tutorial05/pom.xml" />
-        <option value="$PROJECT_DIR$/OpenIMAJ-Tutorial06/pom.xml" />
-        <option value="$PROJECT_DIR$/OpenIMAJ-Tutorial14/pom.xml" />
-        <option value="$PROJECT_DIR$/OpenIMAJ-Tutorial12/pom.xml" />
+        <option value="$PROJECT_DIR$/OpenIMAJ-Tutorials/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_15" project-jdk-name="15" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_15" default="true" project-jdk-name="15" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
 </project>

@@ -2,17 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Coursework1.iml" filepath="$PROJECT_DIR$/.idea/Coursework1.iml" />
-      <module fileurl="file://$PROJECT_DIR$/OpenIMAJ-Tutorial01/OpenIMAJ-Tutorial01.iml" filepath="$PROJECT_DIR$/OpenIMAJ-Tutorial01/OpenIMAJ-Tutorial01.iml" />
-      <module fileurl="file://$PROJECT_DIR$/OpenIMAJ-Tutorial02/OpenIMAJ-Tutorial02.iml" filepath="$PROJECT_DIR$/OpenIMAJ-Tutorial02/OpenIMAJ-Tutorial02.iml" />
-      <module fileurl="file://$PROJECT_DIR$/OpenIMAJ-Tutorial03/OpenIMAJ-Tutorial03.iml" filepath="$PROJECT_DIR$/OpenIMAJ-Tutorial03/OpenIMAJ-Tutorial03.iml" />
-      <module fileurl="file://$PROJECT_DIR$/OpenIMAJ-Tutorial04/OpenIMAJ-Tutorial04.iml" filepath="$PROJECT_DIR$/OpenIMAJ-Tutorial04/OpenIMAJ-Tutorial04.iml" />
-      <module fileurl="file://$PROJECT_DIR$/OpenIMAJ-Tutorial05/OpenIMAJ-Tutorial05.iml" filepath="$PROJECT_DIR$/OpenIMAJ-Tutorial05/OpenIMAJ-Tutorial05.iml" />
-      <module fileurl="file://$PROJECT_DIR$/OpenIMAJ-Tutorial06/OpenIMAJ-Tutorial06.iml" filepath="$PROJECT_DIR$/OpenIMAJ-Tutorial06/OpenIMAJ-Tutorial06.iml" />
-      <module fileurl="file://$PROJECT_DIR$/OpenIMAJ-Tutorial07/OpenIMAJ-Tutorial07.iml" filepath="$PROJECT_DIR$/OpenIMAJ-Tutorial07/OpenIMAJ-Tutorial07.iml" />
-      <module fileurl="file://$PROJECT_DIR$/OpenIMAJ-Tutorial12/OpenIMAJ-Tutorial12.iml" filepath="$PROJECT_DIR$/OpenIMAJ-Tutorial12/OpenIMAJ-Tutorial12.iml" />
-      <module fileurl="file://$PROJECT_DIR$/OpenIMAJ-Tutorial13/OpenIMAJ-Tutorial13.iml" filepath="$PROJECT_DIR$/OpenIMAJ-Tutorial13/OpenIMAJ-Tutorial13.iml" />
-      <module fileurl="file://$PROJECT_DIR$/OpenIMAJ-Tutorial14/OpenIMAJ-Tutorial14.iml" filepath="$PROJECT_DIR$/OpenIMAJ-Tutorial14/OpenIMAJ-Tutorial14.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OpenIMAJ-Tutorials/OpenIMAJ-Tutorials.iml" filepath="$PROJECT_DIR$/OpenIMAJ-Tutorials/OpenIMAJ-Tutorials.iml" />
+      <module fileurl="file://$PROJECT_DIR$/VisionLabs.iml" filepath="$PROJECT_DIR$/VisionLabs.iml" />
     </modules>
   </component>
 </project>
