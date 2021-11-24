@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="OpenIMAJ-Tutorials" target="14" />
+      <module name="OpenIMAJ-Tutorials" target="15" />
     </bytecodeTargetLevel>
   </component>
 </project>

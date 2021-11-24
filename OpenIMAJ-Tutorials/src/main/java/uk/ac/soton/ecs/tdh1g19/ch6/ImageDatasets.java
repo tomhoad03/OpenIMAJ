@@ -17,7 +17,7 @@ import java.util.Random;
 public class ImageDatasets {
     public static void main(String[] args) {
         try {
-            VFSListDataset<FImage> images = new VFSListDataset<>(Paths.get("").toAbsolutePath() + "\\images", ImageUtilities.FIMAGE_READER);
+            VFSListDataset<FImage> images = new VFSListDataset<>(Paths.get("").toAbsolutePath() + "\\OpenIMAJ-Tutorials\\images", ImageUtilities.FIMAGE_READER);
 
             // Database of images can be treated like a list
             System.out.println(images.size());
