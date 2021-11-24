@@ -7,6 +7,7 @@ import org.openimaj.image.colour.RGBColour;
 import org.openimaj.image.processing.convolution.FGaussianConvolve;
 import org.openimaj.image.typography.hershey.HersheyFont;
 
+// A basic maven project created in cmd and integrated into an IDE (IntelliJ)
 public class GettingStarted {
     public static void main( String[] args ) {
         // Create an image

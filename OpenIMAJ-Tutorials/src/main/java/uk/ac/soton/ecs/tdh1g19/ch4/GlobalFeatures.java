@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+// Detecting global features within an image and comparing images based on these features
 public class GlobalFeatures {
     public static void main(String[] args) {
         try {

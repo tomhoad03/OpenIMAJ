@@ -11,6 +11,7 @@ import org.openimaj.math.geometry.shape.Ellipse;
 import javax.swing.*;
 import java.net.URL;
 
+// Using ImageUtilities to process images
 public class ProcessingImages {
     public static void main( String[] args ) {
         try {
@@ -18,7 +19,7 @@ public class ProcessingImages {
             MBFImage image = ImageUtilities.readMBF(new URL("http://static.openimaj.org/media/tutorial/sinaface.jpg"));
             System.out.println(image.colourSpace);
 
-            // Create a named display
+            // Create a named display - exercise 1
             JFrame namedDisplay = DisplayUtilities.createNamedWindow("Named Display", "Chapter 2 Named Display", true);
             DisplayUtilities.display(image, namedDisplay);
             DisplayUtilities.display(image.getBand(0), namedDisplay);
@@ -54,7 +55,7 @@ public class ProcessingImages {
 
             DisplayUtilities.display(image, namedDisplay);
 
-            // Add a border to the quotes
+            // Add a border to the quotes - exercise 2
             image.drawShape(new Ellipse(700f, 450f, 20f, 10f, 0f), 2, RGBColour.RED);
             image.drawShape(new Ellipse(650f, 425f, 25f, 12f, 0f), 2, RGBColour.RED);
             image.drawShape(new Ellipse(600f, 380f, 30f, 15f, 0f), 2, RGBColour.RED);

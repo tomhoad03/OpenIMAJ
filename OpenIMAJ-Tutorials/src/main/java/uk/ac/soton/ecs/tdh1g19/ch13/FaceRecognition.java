@@ -14,6 +14,7 @@ import org.openimaj.image.model.EigenImages;
 
 import java.util.*;
 
+// Using the Eigenfaces algorithm for facial recognition
 public class FaceRecognition {
     public static void main(String[] args) {
         try {
@@ -66,7 +67,7 @@ public class FaceRecognition {
                             double distance = fv.compare(testFeature, DoubleFVComparison.EUCLIDEAN);
                             double threshold = 12;
 
-                            // Adding a threshold - exercise three
+                            // Adding a threshold - exercise 3
                             if (distance < minDistance) {
                                 if (distance <= threshold) {
                                     minDistance = distance;

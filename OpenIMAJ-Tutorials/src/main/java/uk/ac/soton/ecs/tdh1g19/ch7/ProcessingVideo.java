@@ -11,12 +11,15 @@ import org.openimaj.video.xuggle.XuggleVideo;
 
 import java.net.URL;
 
+// Processing videos using VideoDisplay
 public class ProcessingVideo {
     public static void main(String[] args) {
         try {
             // gets a video using Xuggle library
             Video<MBFImage> video = new XuggleVideo(new URL("http://static.openimaj.org/media/tutorial/keyboardcat.flv"));
             VideoDisplay<MBFImage> display1 = VideoDisplay.createVideoDisplay(video);
+
+            // Different kind of frame processing - exercise 1
             display1.addVideoListener(
                     new VideoDisplayListener<>() {
                         public void beforeUpdate(MBFImage frame) {

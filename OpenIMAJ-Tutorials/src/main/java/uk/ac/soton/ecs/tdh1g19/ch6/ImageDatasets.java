@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
+// Using datasets that store collections of images for processing
 public class ImageDatasets {
     public static void main(String[] args) {
         try {
@@ -35,13 +36,12 @@ public class ImageDatasets {
 
             // Display images for the same person
             for (final Map.Entry<String, VFSListDataset<FImage>> entry : groupedFaces.entrySet()) {
-                // DisplayUtilities.display(entry.getKey(), entry.getValue());
+                DisplayUtilities.display(entry.getKey(), entry.getValue());
                 randomFaces.add(entry.getValue().get(rand.nextInt(entry.getValue().size())));
             }
             DisplayUtilities.display("Random faces", randomFaces);
 
             // Use Flickr to display the results of an image search
-            // DefaultTokenFactory.delete(FlickrAPIToken.class);
             FlickrAPIToken flickrToken = DefaultTokenFactory.get(FlickrAPIToken.class);
             FlickrImageDataset<FImage> cats = FlickrImageDataset.create(ImageUtilities.FIMAGE_READER, flickrToken, "cat", 10);
             DisplayUtilities.display("Cats", cats);
@@ -58,6 +58,8 @@ public class ImageDatasets {
 
             Databases can be built from a large number of sources including FTP, HTTP and Jar.
             Some of these sources allow for additional functionality like writing, creating, deleting files and many more which ZIP doesn't have which can only read.
+
+            Exercises 3 and 4 could not be completed due to no freely accessible Bing Search API token
              */
         } catch (Exception e) {
             e.printStackTrace();

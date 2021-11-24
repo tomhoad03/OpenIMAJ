@@ -18,6 +18,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
+// Using K-Means segmentation to break down an image into labelled regions
 public class ClusteringAndSegmentation {
     public static void main(String[] args) {
         try {

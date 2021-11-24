@@ -18,6 +18,7 @@ import org.openimaj.util.parallel.partition.RangePartitioner;
 import java.util.ArrayList;
 import java.util.List;
 
+// Using parallel processing to improve image processing performance
 public class ParallelProcessing {
     public static void main(String[] args) {
         try {

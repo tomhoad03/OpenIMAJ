@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+// Using the Caltech database to classify images
 public class CaltechClassification {
     public static void main(String[] args) {
         try {
@@ -63,12 +64,12 @@ public class CaltechClassification {
             HardAssigner<byte[], float[], IntFloatPair> assigner = trainQuantiser(GroupedUniformRandomisedSampler.sample(splits.getTrainingDataset(), 30), pdsift);
             HomogeneousKernelMap mapper = new HomogeneousKernelMap(HomogeneousKernelMap.KernelType.Chi2, HomogeneousKernelMap.WindowType.Rectangular);
 
-            FeatureExtractor<DoubleFV, Record<FImage>> extractorA = new PHOWExtractor(pdsift, assigner);
-            FeatureExtractor<DoubleFV, Record<FImage>> extractorB = mapper.createWrappedExtractor(new PHOWExtractor(pdsift, assigner));
-            FeatureExtractor<DoubleFV, Record<FImage>> extractorC = new DiskCachingFeatureExtractor<>(new File("\\cache"), new PHOWExtractor(pdsift, assigner));
+            FeatureExtractor<DoubleFV, Record<FImage>> extractor = new PHOWExtractor(pdsift, assigner);
+            FeatureExtractor<DoubleFV, Record<FImage>> extractor1 = mapper.createWrappedExtractor(new PHOWExtractor(pdsift, assigner));
+            FeatureExtractor<DoubleFV, Record<FImage>> extractor2 = new DiskCachingFeatureExtractor<>(new File("\\cache"), new PHOWExtractor(pdsift, assigner));
 
             // Construct and train a classifiers
-            LiblinearAnnotator<Record<FImage>, String> ann = new LiblinearAnnotator<>(extractorC, LiblinearAnnotator.Mode.MULTICLASS, SolverType.L2R_L2LOSS_SVC, 1.0, 0.00001);
+            LiblinearAnnotator<Record<FImage>, String> ann = new LiblinearAnnotator<>(extractor, LiblinearAnnotator.Mode.MULTICLASS, SolverType.L2R_L2LOSS_SVC, 1.0, 0.00001);
             ann.train(splits.getTrainingDataset());
 
             // Evaluate the classification accuracy

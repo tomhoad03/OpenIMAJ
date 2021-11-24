@@ -16,6 +16,7 @@ import org.openimaj.math.model.fit.RANSAC;
 
 import java.net.URL;
 
+// Using SIFT (a local feature detector) to feature match images
 public class FeatureMatching {
     public static void main(String[] args) {
         try {
@@ -49,9 +50,9 @@ public class FeatureMatching {
             DisplayUtilities.display(basicMatches);
 
             // Applies an affine transform using RANSAC to learn from the initial set of matches - exercise 2
-            RobustAffineTransformEstimator modelFitter2 = new RobustAffineTransformEstimator(50.0, 1500, new RANSAC.PercentageInliersStoppingCondition(0.5));
+            RobustAffineTransformEstimator modelFitter = new RobustAffineTransformEstimator(50.0, 1500, new RANSAC.PercentageInliersStoppingCondition(0.5));
             RobustHomographyEstimator modelFitter1 = new RobustHomographyEstimator(50.0, 1500, new RANSAC.PercentageInliersStoppingCondition(0.5), HomographyRefinement.SYMMETRIC_TRANSFER);
-            RobustHomographyEstimator modelFitter = new RobustHomographyEstimator(0.2, HomographyRefinement.NONE);
+            RobustHomographyEstimator modelFitter2 = new RobustHomographyEstimator(0.2, HomographyRefinement.NONE);
 
             /*
             NONE - seemed to improve the bounding box accuracy, some matches were incorrect
@@ -61,6 +62,7 @@ public class FeatureMatching {
             LMedS - was possible to reduce outliers by tweaking outlier proportion
              */
 
+            // Feature matching
             matcher = new ConsistentLocalFeatureMatcher2d<>(new FastBasicKeypointMatcher<>(8), modelFitter);
             matcher.setModelFeatures(queryKeypoints);
             matcher.findMatches(targetKeypoints);
