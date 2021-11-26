@@ -28,6 +28,7 @@ import org.openimaj.image.feature.dense.gradient.dsift.DenseSIFT;
 import org.openimaj.image.feature.dense.gradient.dsift.PyramidDenseSIFT;
 import org.openimaj.image.feature.local.aggregate.BagOfVisualWords;
 import org.openimaj.image.feature.local.aggregate.BlockSpatialAggregator;
+import org.openimaj.image.feature.local.aggregate.PyramidSpatialAggregator;
 import org.openimaj.ml.annotation.linear.LiblinearAnnotator;
 import org.openimaj.ml.clustering.ByteCentroidsResult;
 import org.openimaj.ml.clustering.assignment.HardAssigner;
@@ -54,14 +55,14 @@ public class CaltechClassification {
             GroupedDataset<String, ListDataset<Record<FImage>>, Record<FImage>> data = GroupSampler.sample(allData, 5, false);
 
             // Split the subset into training and testing sets
-            GroupedRandomSplitter<String, Record<FImage>> splits = new GroupedRandomSplitter<>(data, 15, 0, 15);
+            GroupedRandomSplitter<String, Record<FImage>> splits = new GroupedRandomSplitter<>(allData, 15, 0, 15);
 
             // Create SIFT extractor
-            DenseSIFT dsift = new DenseSIFT(5, 7);
-            PyramidDenseSIFT<FImage> pdsift = new PyramidDenseSIFT<>(dsift, 6f, 7);
+            DenseSIFT dsift = new DenseSIFT(3, 4);
+            PyramidDenseSIFT<FImage> pdsift = new PyramidDenseSIFT<>(dsift, 6f, 4);
 
             // Clusterer and feature extractors - exercises 1 and 2
-            HardAssigner<byte[], float[], IntFloatPair> assigner = trainQuantiser(GroupedUniformRandomisedSampler.sample(splits.getTrainingDataset(), 30), pdsift);
+            HardAssigner<byte[], float[], IntFloatPair> assigner = trainQuantiser(GroupedUniformRandomisedSampler.sample(splits.getTrainingDataset(), 600), pdsift);
             HomogeneousKernelMap mapper = new HomogeneousKernelMap(HomogeneousKernelMap.KernelType.Chi2, HomogeneousKernelMap.WindowType.Rectangular);
 
             FeatureExtractor<DoubleFV, Record<FImage>> extractor = new PHOWExtractor(pdsift, assigner);
@@ -94,7 +95,12 @@ public class CaltechClassification {
             Feature caching - much faster
             Accuracy: 0.680
             Error Rate: 0.320
-            Time: 144318ms
+            Time: 144,318ms
+
+            Entire Caltech database (using regular extractor) - much slower due to the much larger size and significantly worse accuracy
+            Accuracy: 0.272
+            Error Rate: 0.728
+            Time: 3,284,127
              */
         } catch (Exception e) {
             e.printStackTrace();
@@ -136,7 +142,8 @@ public class CaltechClassification {
 
             BagOfVisualWords<byte[]> bovw = new BagOfVisualWords<>(assigner);
 
-            BlockSpatialAggregator<byte[], SparseIntFV> spatial = new BlockSpatialAggregator<>(bovw, 2, 2);
+            // BlockSpatialAggregator<byte[], SparseIntFV> spatial = new BlockSpatialAggregator<>(bovw, 2, 2);
+            PyramidSpatialAggregator<byte[], SparseIntFV> spatial = new PyramidSpatialAggregator<>(bovw, 2);
 
             return spatial.aggregate(pdsift.getByteKeypoints(0.015f), image.getBounds()).normaliseFV();
         }
